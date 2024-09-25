@@ -1,24 +1,20 @@
-import { pool } from "../config/mysql.db.js";
+import { basedatos } from "../config/mysql.db";
 import bcrypt, { hash } from "bcrypt";
 import { config } from "dotenv";
 config();
 
 export const crearEmpleado = async (req, res) => {
-    const identificacion = req.body.identificacion;
-    const nombre = req.body.nombre;
-    const apellido = req.body.apellido;
-    const celular = req.body.celular;
-    const direccion = req.body.direccion;
-    const email = req.body.email;
-    const contrasena = req.body.contrasena;
-    const rol = req.body.rol;
+    const { identificacion, nombre, apellido, usuario, celular, direccion, email, contrasena, rol } = req.body;
 
-    const hashedPassword = await bcrypt.hash(contrasena, saltRounds);
+    console.log('Datos recibidos:', req.body); // Para depuración
 
     try {
-        const [respuesta] = await pool.query(`CALL SP_CREAR_EMPLEADO('${identificacion}','${nombre}','${apellido}','${celular}','${direccion}','${email}','${hashedPassword}','${rol}');`);
-        res.status(200).json(respuesta);
+        const [respuesta] = await basedatos.query(`CALL SP_CREAR_EMPLEADO('${rol}','${usuario}','${identificacion}','${nombre}','${apellido}','${celular}','${direccion}','${contrasena}','${email}');`);
+        console.log('Respuesta de la base de datos:', respuesta); 
     } catch (error) {
-        res.status(500).json(error);
+        console.error('Error al crear empleado:', error);
+        res.status(500).json({ error: 'Error al crear empleado', detalles: error });
     }
 };
+
+    // const hashedPassword = await bcrypt.hash(contrasena, saltRounds);

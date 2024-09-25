@@ -1,10 +1,9 @@
-import Router from "express";
-import { inicio } from "../controllers/controllers.js";
-import rutaEmpleados from "./empleados.routes.js";
+import {Router} from "express";
+import inicio from "../controllers/controllers";
+import rutaEmpleados from "./empleados.routes";
 
 const ruta = Router();
 
-ruta.use("/", inicio);
 ruta.use("/empleados", rutaEmpleados);
 
 export default ruta
