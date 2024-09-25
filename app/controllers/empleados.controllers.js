@@ -3,6 +3,8 @@ import bcrypt, { hash } from "bcrypt";
 import { config } from "dotenv";
 config();
 
+const saltRounds = 10;
+
 export const crearEmpleado = async (req, res) => {
     const { identificacion, nombre, apellido, usuario, celular, direccion, email, contrasena, rol } = req.body;
 
