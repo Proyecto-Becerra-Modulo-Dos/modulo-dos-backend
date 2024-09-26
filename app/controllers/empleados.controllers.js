@@ -5,6 +5,15 @@ config();
 
 const saltRounds = 10;
 
+export const listarEmpleados = async (req, res) => {
+    try {
+        const [rows] = await basedatos.query("CALL SP_VER_EMPLEADOS()");
+        res.status(200).json({ empleados: rows[0] });
+    } catch (error) {
+        res.status(500).json(error);
+    }
+};
+
 export const crearEmpleado = async (req, res) => {
     const { identificacion, nombre, apellido, usuario, celular, direccion, email, contrasena, rol } = req.body;
     const hashedPassword = await bcrypt.hash(contrasena, saltRounds);
