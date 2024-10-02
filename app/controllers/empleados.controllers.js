@@ -10,6 +10,8 @@ export const listarEmpleados = async (req, res) => {
         const [rows] = await basedatos.query("CALL SP_VER_EMPLEADOS()");
         res.status(200).json({ empleados: rows[0] });
     } catch (error) {
+        console.log(error);
+        
         res.status(500).json(error);
     }
 };
@@ -19,7 +21,7 @@ export const crearEmpleado = async (req, res) => {
     const hashedPassword = await bcrypt.hash(contrasena, saltRounds);
 
     try {
-        const [respuesta] = await basedatos.query(`CALL SP_CREAR_EMPLEADO('${tipoId}','${rol}','${identificacion}','${nombre}','${apellido}','${email}','${salario}','${hashedPassword}');`);
+        const [respuesta] = await basedatos.query(`CALL SP_CREAR_EMPLEADO('${rol}','${identificacion}','${tipoId}','${nombre}','${apellido}','${hashedPassword}','${email}','${salario}');`);
         console.log('Respuesta base de datos:', respuesta); 
         res.status(201).json({ message: 'Empleado creado exitosamente'});
     } catch (error) {
