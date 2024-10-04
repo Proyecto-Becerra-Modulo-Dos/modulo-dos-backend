@@ -36,10 +36,10 @@ export const listarCompensaciones = async (req, res) => {
 };
 
 export const crearCompensacion = async (req, res) => {
-    const { cedula, salario, bonificaciones, incentivos, fechaInicio, fechaFin } = req.body;
+    const { nombre, salario, bonificacion, incentivo, fechaInicio, fechaFin } = req.body;
 
     try {
-        const [respuesta] = await pool.query(`CALL SP_CREAR_COMPENSACION('${fechaInicio}', '${fechaFin}','${salario}','${cedula}','${bonificaciones}','${incentivos}');`);
+        const [respuesta] = await pool.query(`CALL SP_CREAR_COMPENSACION('${salario}','${incentivo}','${bonificacion}','${fechaInicio}', '${fechaFin}','${nombre}');`);
         console.log('Respuesta base de datos:', respuesta); 
         res.status(201).json({ message: 'Plan creado exitosamente'});
     } catch (error) {
