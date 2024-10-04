@@ -92,6 +92,7 @@ export const desactivarCompensacion = async (req, res) => {
         const [respuesta] = await pool.query(`CALL SP_DESACTIVAR_COMPENSACION('${id}')`);
         res.json(respuesta);
     } catch (error) {
+        console.log(error);        
         res.status(500).json(error);
     }
 };
