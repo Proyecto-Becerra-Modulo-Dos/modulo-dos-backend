@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { pool } from "../config/mysql.db";
+import { basedatos, pool } from "../config/mysql.db";
 import 'dayjs/locale/es.js';
 import { config } from "dotenv";
 config();
@@ -96,3 +96,25 @@ export const desactivarCompensacion = async (req, res) => {
         res.status(500).json(error);
     }
 };
+
+export const listarEmpleadosCompensacion = async (req, res) => {
+    const id = req.params.id;
+
+    try {
+        const [respuestaCompensacion] = await pool.query(`CALL SP_BUSCAR_COMPENSACION('${id}')`);
+        const [respuestaEmpleados] = await pool.query(`CALL SP_BUSCAR_EMPLEADO_COMPENSACION('${id}')`);
+        
+        const empleadoIds = respuestaEmpleados[0].map(emp => emp.id_empleado).join(',');
+
+        const [empleados] = await basedatos.query(`CALL SP_BUSCAR_EMPLEADOS_INFO('${empleadoIds}')`);
+        
+        res.status(200).json({
+            compensaciones: respuestaCompensacion[0],
+            empleados: empleados[0]
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json(error);
+    }
+};
+
