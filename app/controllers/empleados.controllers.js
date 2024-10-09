@@ -1,5 +1,6 @@
 import { basedatos } from "../config/mysql.db";
 import bcrypt, { hash } from "bcrypt";
+import { pool } from "../config/mysql.db";
 import { config } from "dotenv";
 config();
 
@@ -26,5 +27,25 @@ export const crearEmpleado = async (req, res) => {
     } catch (error) {
         console.error('Error al crear empleado:', error);
         res.status(500).json({ error: 'Error al crear empleado', detalles: error });
+    }
+};
+
+export const cuentaEmpleado = async (req, res) => {
+    try {
+        const [rows] = await pool.query("CALL SP_VER_CUENTA_BANCARIA()");
+        res.status(200).json({ cuenta: rows[0] });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json(error);
+    }
+};
+
+export const solicitudes = async (req, res) => {
+    try {
+        const [rows] = await pool.query("CALL SP_VER_SOLICITUDES()");
+        res.status(200).json({ cuenta: rows[0] });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json(error);
     }
 };
