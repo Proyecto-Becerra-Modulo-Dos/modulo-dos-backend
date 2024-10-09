@@ -7,13 +7,22 @@ export const listarEmpleadosNomina = async (req, res) => {
         const [respuestaNomina] = await pool.query(`CALL SP_EMPLEADOS_NOMINA()`);
         const empleadoIds = respuestaNomina[0].map(emp => emp.id_empleado).join(',');
         const [empleados] = await basedatos.query(`CALL SP_BUSCAR_EMPLEADOS_INFO('${empleadoIds}')`);
-        
-        console.log("NOMINA: ",respuestaNomina[0]);
-        console.log("EMPLEADOS: ",empleados[0]);
+
+        const [respuestaNominaAprobada] = await pool.query(`CALL SP_EMPLEADOS_NOMINA_APROBADA()`);
+        const empleadoIdsAprobada = respuestaNominaAprobada[0].map(emp => emp.id_empleado).join(',');
+        const [empleadosAprobada] = await basedatos.query(`CALL SP_BUSCAR_EMPLEADOS_INFO('${empleadoIdsAprobada}')`);
+
+        const [respuestaNominaDesaprobada] = await pool.query(`CALL SP_EMPLEADOS_NOMINA_APROBADA()`);
+        const empleadoIdsDesaprobada = respuestaNominaDesaprobada[0].map(emp => emp.id_empleado).join(',');
+        const [empleadosDesaprobada] = await basedatos.query(`CALL SP_BUSCAR_EMPLEADOS_INFO('${empleadoIdsDesaprobada}')`);
         
         res.status(200).json({
             nominas: respuestaNomina[0],
-            empleados: empleados[0]
+            empleados: empleados[0],
+            nominasAprobada: respuestaNominaAprobada[0],
+            empleadosAprobada: empleadosAprobada[0],
+            nominasDesaprobada: respuestaNominaDesaprobada[0],
+            empleadosDesaprobada: empleadosDesaprobada[0]
         });
     } catch (error) {
         console.log(error);
