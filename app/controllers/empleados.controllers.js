@@ -49,3 +49,12 @@ export const solicitudes = async (req, res) => {
         res.status(500).json(error);
     }
 };
+export const solicitar = async (req, res) => {
+    try {
+        const [rows] = await pool.query("CALL SP_VER_CUENTA_BANCARIA()");
+        res.status(200).json({ cuenta: rows[0] });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json(error);
+    }
+};
