@@ -89,3 +89,13 @@ export const solicitar = async (req, res) => {
         res.status(500).json(error);
     }
 };
+export const registrarHoras = async (req, res) => {
+    const {id_politicas_horas, horas, id_empleado} = req.body;
+    try {
+        const [rows] = await pool.query("CALL SP_RegistrarHoras(?,?,?)");
+        res.status(200).json({ cuenta: rows[0] });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json(error);
+    }
+}

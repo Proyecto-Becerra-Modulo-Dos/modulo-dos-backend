@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { crearEmpleado, listarEmpleados, verNomina } from "../controllers/empleados.controllers";
+import { crearEmpleado, listarEmpleados, registrarHoras, verNomina } from "../controllers/empleados.controllers";
 import { cuentaEmpleado, solicitar, solicitudes } from "../controllers/empleados.controllers";
 
 const rutaEmpleados = Router();
@@ -10,6 +10,7 @@ rutaEmpleados.post("/vernomina", verNomina);
 rutaEmpleados.get("/cuenta", cuentaEmpleado);
 rutaEmpleados.get("/solicitudes", solicitudes);
 rutaEmpleados.get("/solicitar", solicitar)
+rutaEmpleados.get("/registrarHoras", registrarHoras)
 
 
 export default rutaEmpleados;
