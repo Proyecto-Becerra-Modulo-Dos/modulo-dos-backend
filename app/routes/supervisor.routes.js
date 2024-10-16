@@ -1,10 +1,15 @@
 import { Router } from "express";
 import {
+  aprobarHorasExtra,
   aprobarHorasTrabajadas,
   aprobarPermiso,
   aprobarTrabajoRemoto,
+  rechazarHorasExtra,
   rechazarHorasTrabajadas,
   rechazarPermiso,
+  verHorasExtra,
+  verHorasExtraAprobados,
+  verHorasExtraRechazados,
   verHorasTrabajadas,
   verHorasTrabajadasAprobados,
   verHorasTrabajadasRechazados,
@@ -33,5 +38,11 @@ rutaSupervisor.get(
   "/verHorasTrabajadasRechazados",
   verHorasTrabajadasRechazados
 );
+
+rutaSupervisor.get("/verHorasExtra", verHorasExtra);
+rutaSupervisor.post("/aprobarHorasExtra", aprobarHorasExtra);
+rutaSupervisor.post("/rechazarHorasExtra", rechazarHorasExtra);
+rutaSupervisor.get("/verHorasExtraAprobados", verHorasExtraAprobados);
+rutaSupervisor.get("/verHorasExtraRechazados", verHorasExtraRechazados);
 
 export default rutaSupervisor;
