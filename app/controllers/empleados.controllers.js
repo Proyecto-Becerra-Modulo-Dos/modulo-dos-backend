@@ -89,3 +89,13 @@ export const solicitar = async (req, res) => {
         res.status(500).json(error);
     }
 };
+export const crearSolicitud = async (req, res) => {
+    const {id_tipo, descripcion, id_empleado, banco} = req.body;
+    try {
+        const [rows] = await pool.query("CALL SP_InsertarSolicitud(?, ?, ?, ?)", [id_tipo, descripcion, id_empleado, banco]);
+        res.status(200).json({ cuenta: rows[0] });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json(error);
+    }
+}
