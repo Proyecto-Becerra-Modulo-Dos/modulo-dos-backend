@@ -89,3 +89,15 @@ export const solicitar = async (req, res) => {
         res.status(500).json(error);
     }
 };
+
+
+export const FormularioInscripcion = async (req, res ) => {
+    const { identificacion, direccion, telefono, fecha_nacimiento } = req.body;
+    try {
+        const [respuesta] = await basedatos.query(`CALL SP_ACTUALIZAR_DATOS_INCORPORACION('${identificacion}','${direccion}','${telefono}','${fecha_nacimiento}');`);
+        console.log("Respuesta base de datos:", respuesta);
+        res.status(200).json({ message: 'Datos de inscripción actualizados exitos'});
+    } catch (error) {
+        console.error('Error al actualizar datos de inscripción:', error);
+    }
+}
