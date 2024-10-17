@@ -1,14 +1,26 @@
-import { basedatos } from "../config/mysql.db";
+import { basedatos, pool } from "../config/mysql.db";
 import bcrypt, { hash } from "bcrypt";
 import { config } from "dotenv";
 config();
 
 const saltRounds = 10;
 
+// Ver descripcion de roles
+export const mostrarDescripcionRol = async (req, res) => {
+    const { id_usuario } = req.body;
+    try {
+        const request = await basedatos.query("CALL SP_MOSTRAR_ROLES(?)", [id_usuario]);
+        res.status(200).json( request[0][0] );
+    } catch (err) {
+        console.error(err);
+        res.status(500).json(err);
+    }
+}
+
 //Ver objetivo
 export const verObjetivos = async(req, res) => {
     try {
-        const [rows] = await basedatos.query("CALL SP_LISTAR_OBJETIVOS()");
+        const [rows] = await pool.query("CALL SP_LISTAR_OBJETIVOS()");
         res.status(200).json({ message: rows[0] });
     } catch (err) {
         res.status(500).json(err);
@@ -20,7 +32,7 @@ export const crearObjetivo = async (req, res) => {
     const { objetivo, empleadoid, estado } = req.body;
 
     try {
-        const [respuesta] = await basedatos.query(`CALL SP_CREAR_OBJETIVO('${objetivo}','${empleadoid}','${estado}');`);
+        const [respuesta] = await pool.query(`CALL SP_CREAR_OBJETIVO('${objetivo}','${empleadoid}','${estado}');`);
         console.log('Respuesta base de datos:', respuesta);
         res.status(201).json({ message: 'Objetivo creado exitosamente' });
     } catch (error) {
@@ -37,7 +49,7 @@ export const eliminarObjetivo = async (req, res) => {
     
 
     try {
-        const [respuesta] = await basedatos.query(`CALL SP_ELIMINAR_OBJETIVOS('${idDesarrollo_Profesional}');`);
+        const [respuesta] = await pool.query(`CALL SP_ELIMINAR_OBJETIVOS('${idDesarrollo_Profesional}');`);
         console.log('Respuesta base de datos:', respuesta);
         res.status(201).json({ message: 'Objetivo eliminado exitosamente' });
     } catch (error) {
@@ -50,7 +62,7 @@ export const eliminarObjetivo = async (req, res) => {
 export const editarObjetivo = (req, res) => {
     const { idDesarrollo_Profesional, objetivo} = req.body;
     try {
-        const request = basedatos.query("CALL SP_EDITAR_OBJETIVOS(?, ?)", [idDesarrollo_Profesional, objetivo])
+        const request = pool.query("CALL SP_EDITAR_OBJETIVOS(?, ?)", [idDesarrollo_Profesional, objetivo])
         res.status(201).json({ message: 'Objetivos actualizados' });
     } catch (err) {
         console.error(err);
@@ -63,7 +75,7 @@ export const mostrarObjetivo = async (req, res) => {
     const { idDesarrollo_Profesional } = req.body;
 
     try {
-        const [respuesta] = await basedatos.query(`CALL SP_MOSTRAR_OBJETIVO('${idDesarrollo_Profesional}');`);
+        const [respuesta] = await pool.query(`CALL SP_MOSTRAR_OBJETIVO('${idDesarrollo_Profesional}');`);
         console.log('Respuesta base de datos:', respuesta);
         res.status(200).json({ message: respuesta[0] });
     } catch (error) {
@@ -74,7 +86,7 @@ export const mostrarObjetivo = async (req, res) => {
 
 export const listarEmpleados = async (req, res) => {
     try {
-        const [rows] = await basedatos.query("CALL SP_VER_EMPLEADOS()");
+        const [rows] = await pool.query("CALL SP_VER_EMPLEADOS()");
         res.status(200).json({ empleados: rows[0] });
     } catch (error) {
         res.status(500).json(error);
@@ -86,7 +98,7 @@ export const crearEmpleado = async (req, res) => {
     const hashedPassword = await bcrypt.hash(contrasena, saltRounds);
 
     try {
-        const [respuesta] = await basedatos.query(`CALL SP_CREAR_EMPLEADO('${tipoId}','${rol}','${identificacion}','${nombre}','${apellido}','${email}','${salario}','${hashedPassword}');`);
+        const [respuesta] = await pool.query(`CALL SP_CREAR_EMPLEADO('${tipoId}','${rol}','${identificacion}','${nombre}','${apellido}','${email}','${salario}','${hashedPassword}');`);
         console.log('Respuesta base de datos:', respuesta);
         res.status(201).json({ message: 'Empleado creado exitosamente' });
     } catch (error) {
@@ -99,7 +111,7 @@ export const verNomina = async (req, res) => {
     const { empleadoid } = req.body;
 
     try {
-        const [rows] = await basedatos.query(`CALL SP_VER_NOMINA('${empleadoid}');`);
+        const [rows] = await pool.query(`CALL SP_VER_NOMINA('${empleadoid}');`);
         let fecha_pago = rows[0][0].fecha_pago 
         rows[0][0].fecha_pago = fecha_pago.toDateString("es-ES")
 
