@@ -10,7 +10,7 @@ rutaEmpleados.post("/vernomina", verNomina);
 rutaEmpleados.get("/cuenta", cuentaEmpleado);
 rutaEmpleados.get("/solicitudes", solicitudes);
 rutaEmpleados.get("/solicitar", solicitar)
-rutaEmpleados.get("/registrarHoras", registrarHoras)
+rutaEmpleados.post("/registrarHoras", registrarHoras)
 
 
 export default rutaEmpleados;

@@ -90,10 +90,10 @@ export const solicitar = async (req, res) => {
     }
 };
 export const registrarHoras = async (req, res) => {
-    const {id_politicas_horas, horas, id_empleado} = req.body;
+    const {id_politicas_horas, hora_inicio, hora_fin, id_empleado} = req.body;
     try {
-        const [rows] = await pool.query("CALL SP_RegistrarHoras(?,?,?)");
-        res.status(200).json({ cuenta: rows[0] });
+        const [rows] = await pool.query("CALL SP_REGISTRAR_HORAS(?,?,?,?)", [id_politicas_horas, hora_inicio, hora_fin, id_empleado]);
+        res.status(200).json({ message: "Horas Registradas" });
     } catch (error) {
         console.log(error);
         res.status(500).json(error);
