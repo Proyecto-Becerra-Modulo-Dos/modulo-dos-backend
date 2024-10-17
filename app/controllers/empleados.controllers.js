@@ -28,8 +28,8 @@ export const crearEmpleado = async (req, res) => {
         console.error('Error al crear empleado:', error);
         res.status(500).json({ error: 'Error al crear empleado', detalles: error });
     }
-
 };
+
 
 export const verNomina = async (req, res) => {
     const { empleadoid } = req.body;
