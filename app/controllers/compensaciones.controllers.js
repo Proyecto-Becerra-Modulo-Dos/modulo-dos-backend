@@ -34,7 +34,7 @@ export const listarCompensaciones = async (req, res) => {
         res.status(500).json(error);
     }
 };
-
+// 
 export const crearCompensacion = async (req, res) => {
     const { nombre, salario, bonificacion, incentivo, fechaInicio, fechaFin } = req.body;
 
