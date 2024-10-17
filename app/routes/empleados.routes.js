@@ -12,7 +12,7 @@ rutaEmpleados.post("/vernomina", verNomina);
 rutaEmpleados.get("/cuenta", cuentaEmpleado);
 rutaEmpleados.get("/solicitudes", solicitudes);
 rutaEmpleados.get("/solicitar", solicitar);
-rutaEmpleados.put("/inscripcion", FormularioInscripcion);;
+rutaEmpleados.put("/inscripcion", FormularioInscripcion);
 
 
 export default rutaEmpleados;
