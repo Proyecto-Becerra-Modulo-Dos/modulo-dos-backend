@@ -30,7 +30,6 @@ export const crearEmpleado = async (req, res) => {
     }
 };
 
-
 export const verNomina = async (req, res) => {
     const { empleadoid } = req.body;
 
