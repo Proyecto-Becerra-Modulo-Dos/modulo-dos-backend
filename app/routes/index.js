@@ -12,4 +12,4 @@ ruta.use("/empleados", rutaEmpleados);
 ruta.use("/compensaciones", rutaCompensaciones);
 ruta.use("/nomina", rutaNomina);
 
-export default ruta
+export default ruta;
