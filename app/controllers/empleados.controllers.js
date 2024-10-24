@@ -22,7 +22,7 @@ export const crearEmpleado = async (req, res) => {
 
     try {
         const [respuesta] = await basedatos.query(`CALL SP_CREAR_EMPLEADO('${rol}','${identificacion}','${tipoId}','${nombre}','${apellido}','${hashedPassword}','${email}','${salario}');`);
-        console.log('Respuesta base de datos:', respuesta); 
+        console.log('Respuesta base de datos:', respuesta);
         res.status(201).json({ message: 'Empleado creado exitosamente'});
     } catch (error) {
         console.error('Error al crear empleado:', error);
@@ -36,7 +36,7 @@ export const verNomina = async (req, res) => {
 
     try {
         const [rows] = await basedatos.query(`CALL SP_VER_NOMINA('${empleadoid}');`);
-        let fecha_pago = rows[0][0].fecha_pago 
+        let fecha_pago = rows[0][0].fecha_pago
         rows[0][0].fecha_pago = fecha_pago.toDateString("es-ES")
 
         let salario_base = parseInt(rows[0][0].salario_base)
@@ -89,3 +89,26 @@ export const solicitar = async (req, res) => {
         res.status(500).json(error);
     }
 };
+
+export const permisoAusencia = async(req, res) =>{
+  const { fecha_ausencia, tipo_permiso, motivo, id_empleado } = req.body;
+  try {
+    const [resultado] = await pool.query(
+      `INSERT INTO Permiso_Ausencia (fecha_ausencia, tipo_permiso, motivo,empleadoid) VALUES (?, ?, ?, ?)`,
+      [
+          fecha_ausencia,
+          tipo_permiso,
+          motivo,
+          id_empleado
+      ]
+    );
+    res.status(201).json({ success: true, message: 'Permiso creado exitosamente', data: resultado.insertId});
+  }catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+        mensaje: "Error en las operaciones",
+        error: error.message
+    });
+  }
+}
